@@ -25,7 +25,7 @@ fun startPolling() {
                 var min = 0
                 var max = 100
 
-                if (args.isNotEmpty() && isNum(args[0])) {
+                if (args.size == 1 && isNum(args[0])) {
                     max = args[0].toInt()
                 } else {
                     if (args.size == 2 && isNum(args[0]) && isNum(args[1])) {
