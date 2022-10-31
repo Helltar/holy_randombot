@@ -4,8 +4,8 @@ import com.github.kotlintelegrambot.dispatcher.command
 import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.logging.LogLevel
 import java.io.BufferedReader
-import java.io.FileNotFoundException
 import java.io.FileReader
+import java.io.IOException
 import java.util.*
 
 fun startPolling() {
@@ -25,7 +25,7 @@ fun startPolling() {
                 var min = 0
                 var max = 100
 
-                if (args.size == 1 && isNum(args[0])) {
+                if (args.isNotEmpty() && isNum(args[0])) {
                     max = args[0].toInt()
                 } else {
                     if (args.size == 2 && isNum(args[0]) && isNum(args[1])) {
@@ -53,12 +53,10 @@ fun genRandomInt(min: Int, max: Int) = (Random().nextInt(max - min + 1) + min).t
 
 fun isNum(str: String) = str.toIntOrNull() != null
 
-fun getLineFromFile(filename: String): String {
+fun getLineFromFile(filename: String): String =
     try {
-        return BufferedReader(FileReader(filename)).readLine()
-    } catch (e: FileNotFoundException) {
+        BufferedReader(FileReader(filename)).readLine()
+    } catch (e: IOException) {
         println(e)
+        ""
     }
-
-    return ""
-}
