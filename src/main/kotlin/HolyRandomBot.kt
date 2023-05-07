@@ -5,23 +5,20 @@ import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.logging.LogLevel
 import java.io.BufferedReader
 import java.io.FileReader
-import java.io.IOException
 import java.util.*
 
 fun startPolling() {
 
     val bot = bot {
 
-        token = getLineFromFile("token.txt")
+        token = getTelegramToken("token.txt")
         logLevel = LogLevel.Error
 
         dispatch {
 
-            command("start") {
-                bot.sendMessage(ChatId.fromId(update.message!!.chat.id), genRandomInt(0, 100))
-            }
+            command("start") { bot.sendMessage(ChatId.fromId(update.message!!.chat.id), genRandomInt(0, 100)) }
 
-            command("gen") {
+            command("random") {
                 var min = 0
                 var max = 100
 
@@ -41,7 +38,7 @@ fun startPolling() {
                         genRandomInt(max, min)
                     }
 
-                bot.sendMessage(ChatId.fromId(message.chat.id), result, replyToMessageId = update.message!!.messageId)
+                bot.sendMessage(ChatId.fromId(update.message!!.chat.id), result, replyToMessageId = update.message!!.messageId)
             }
         }
     }
@@ -53,10 +50,9 @@ fun genRandomInt(min: Int, max: Int) = (Random().nextInt(max - min + 1) + min).t
 
 fun isNum(str: String) = str.toIntOrNull() != null
 
-fun getLineFromFile(filename: String): String =
+fun getTelegramToken(filename: String): String =
     try {
         BufferedReader(FileReader(filename)).readLine()
-    } catch (e: IOException) {
-        println(e)
-        ""
+    } catch (e: Exception) {
+        throw RuntimeException("Failed to read Telegram API Token")
     }
