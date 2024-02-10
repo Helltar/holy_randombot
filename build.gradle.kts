@@ -1,9 +1,9 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.7.20"
+    kotlin("jvm") version "1.9.22"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
     application
-    id ("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
 group = "com.helltar"
@@ -15,17 +15,13 @@ repositories {
 }
 
 dependencies {
-    implementation ("io.github.kotlin-telegram-bot.kotlin-telegram-bot:telegram:6.0.7")
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
+    implementation("io.github.kotlin-telegram-bot.kotlin-telegram-bot:telegram:6.0.7")
 }
 
 application {
     mainClass.set("MainKt")
 }
 
-tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
-    archiveClassifier.set("")
+tasks.shadowJar {
+    archiveClassifier = ""
 }
